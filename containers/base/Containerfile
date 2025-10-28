@@ -1,0 +1,26 @@
+ARG BASE_IMAGE="ghcr.io/gbraad-devenv/fedora/dotfiles"
+ARG BASE_VERSION="42"
+
+FROM ${BASE_IMAGE}:${BASE_VERSION}
+
+ARG USER="gbraad"
+
+USER root
+
+RUN dnf install -y \
+        mingw64-gcc \
+        mingw64-gcc-c++ \
+        mingw64-SDL2 \
+        mingw64-SDL2-static \
+        mingw64-zlib \
+        mingw64-zlib-static \
+        mingw64-libogg \
+        mingw64-libstdc++ \
+        cmake \
+    && dnf clean all \
+    && rm -rf /var/cache/yum
+
+RUN systemctl enable tailscaled
+
+ENTRYPOINT ["/sbin/init"]
+#CMD ["/sbin/init"]
